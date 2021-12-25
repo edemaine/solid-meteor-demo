@@ -1,5 +1,6 @@
-import {createRef, createSignal, onCleanup} from 'solid-js';
+import {createEffect, createRef, createSignal, onCleanup} from 'solid-js';
 import {render} from 'solid-js/web';
+import {Session} from 'meteor/session'
 
 function Hello(props) {
   return <h2>Hello {props.name}!</h2>;
@@ -20,8 +21,10 @@ function Timer(props) {
   return <h2>TIMER: {count}</h2>;
 }
 
+
 function App(props) {
-  const [name, setName] = createSignal('Solid');
+  const [name, setName] = createSignal(Session.get('name') || 'Solid');
+  createEffect(() => Session.set('name', name()));
   return <>
     <h1>Minimal Meteor + SolidJS demo</h1>
     <NameInput name={name()} setName={setName}/>

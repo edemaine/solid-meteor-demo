@@ -15,3 +15,5 @@ shell-server@0.5.0            # Server-side component of the `meteor shell` comm
 webapp@1.13.0                  # Serves a Meteor app over HTTP
 server-render@0.4.0           # Support for server-side rendering
 hot-module-replacement@0.4.0  # Rebuilds the client if there is a change on the client without restarting the server
+session
+autoupdate
