@@ -1,6 +1,7 @@
 import {createEffect, createRef, createSignal, onCleanup} from 'solid-js';
 import {render} from 'solid-js/web';
-import {Session} from 'meteor/session'
+import {Meteor} from 'meteor/meteor';
+import {Session} from 'meteor/session';
 
 function Hello(props) {
   return <h2>Hello {props.name}!</h2>;
@@ -21,6 +22,10 @@ function Timer(props) {
   return <h2>TIMER: {count}</h2>;
 }
 
+function ToDo(props) {
+  const sub = Meteor.subscribe('todo');
+  onCleanup(() => sub.stop());
+}
 
 function App(props) {
   const [name, setName] = createSignal(Session.get('name') || 'Solid');
@@ -30,6 +35,7 @@ function App(props) {
     <NameInput name={name()} setName={setName}/>
     <Hello name={name()}/>
     <Timer/>
+    <ToDo/>
   </>;
 }
 
