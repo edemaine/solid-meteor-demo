@@ -17,3 +17,5 @@ server-render@0.4.0           # Support for server-side rendering
 hot-module-replacement@0.4.0  # Rebuilds the client if there is a change on the client without restarting the server
 session
 autoupdate
+mongo
+check
