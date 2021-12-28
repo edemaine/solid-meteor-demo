@@ -35,11 +35,11 @@ function TodoList(props) {
     setTodos(ToDo.find({}, {sort: {created: -1}}).fetch()));
   onCleanup(() => computation.stop());
   // Display
-  let ref;
+  let itemInput;
   function onAdd(e) {
     e.preventDefault();
-    Meteor.call('todo.add', ref.value);
-    ref.value = '';
+    Meteor.call('todo.add', itemInput.value);
+    itemInput.value = '';
   }
   function onDelete(e) {
     Meteor.call('todo.del', e.target.parentNode.parentNode.dataset.id);
@@ -47,7 +47,7 @@ function TodoList(props) {
   return <div>
     <h2>To-Do List</h2>
     <form onSubmit={onAdd}>
-      <input ref={ref}/>
+      <input ref={itemInput}/>
       <input type="submit" onClick={onAdd} value="Add Item"/>
     </form>
     <table>
