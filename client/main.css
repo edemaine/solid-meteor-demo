@@ -2,3 +2,8 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+
+.date {
+  font-size: small;
+  padding: 0px 16px;
+}
