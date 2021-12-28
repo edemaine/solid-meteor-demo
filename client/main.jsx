@@ -18,14 +18,14 @@ function NameInput(props) {
   </div>;
 }
 
-function Timer(props) {
+function Timer() {
   const [count, setCount] = createSignal(0);
   const timer = setInterval(() => setCount(count() + 1), 1000);
   onCleanup(() => clearInterval(timer));
   return <h2>TIMER: {count}</h2>;
 }
 
-function TodoList(props) {
+function TodoList() {
   // Subscription
   const sub = Meteor.subscribe('todo');
   onCleanup(() => sub.stop());
@@ -42,7 +42,9 @@ function TodoList(props) {
     itemInput.value = '';
   }
   function onDelete(e) {
-    Meteor.call('todo.del', e.target.parentNode.parentNode.dataset.id);
+    const button = e.currentTarget;
+    const row = button.parentNode.parentNode;
+    Meteor.call('todo.del', row.dataset.id);
   }
   return <div>
     <h2>To-Do List</h2>
@@ -62,7 +64,7 @@ function TodoList(props) {
   </div>;
 }
 
-function App(props) {
+function App() {
   // Keep name signal synchronized with Meteor Session variable.
   // This preserves the name field across server-triggered reloads.
   const [name, setName] = createSignal(Session.get('name') || 'Solid');
@@ -77,4 +79,4 @@ function App(props) {
   </>;
 }
 
-render(App, document.body);
+render(() => <App/>, document.body);
