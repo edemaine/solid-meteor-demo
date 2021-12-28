@@ -31,7 +31,9 @@ function TodoList(props) {
   onCleanup(() => sub.stop());
   // Query
   const [todos, setTodos] = createSignal([]);
-  Tracker.autorun(() => setTodos(ToDo.find({}, {sort: {created: -1}}).fetch()));
+  const computation = Tracker.autorun(() =>
+    setTodos(ToDo.find({}, {sort: {created: -1}}).fetch()));
+  onCleanup(() => computation.stop());
   // Display
   let ref;
   function onAdd(e) {
