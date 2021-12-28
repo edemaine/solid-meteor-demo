@@ -9,8 +9,9 @@ to build the user interface within the
 
 1. [Install Meteor](https://docs.meteor.com/install.html):
    `npm install -g meteor`
-2. Clone this repository.
-3. Run `meteor` within the repository.
+2. Clone this repository and `cd` into the directory.
+3. Run `npm install`.
+3. Run `meteor` to start a dev server.
 4. Open `http://localhost:3000`.
 
 ## How It Works
