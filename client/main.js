@@ -61,8 +61,11 @@ function TodoList(props) {
 }
 
 function App(props) {
+  // Keep name signal synchronized with Meteor Session variable.
+  // This preserves the name field across server-triggered reloads.
   const [name, setName] = createSignal(Session.get('name') || 'Solid');
   createEffect(() => Session.set('name', name()));
+
   return <>
     <h1>Minimal Meteor + SolidJS demo</h1>
     <NameInput name={name()} setName={setName}/>
