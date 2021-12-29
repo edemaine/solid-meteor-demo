@@ -16,13 +16,13 @@ NameInput = (props) ->
      onInput={(e) -> props.setName(e.target.value)}/>
   </div>
 
-Timer = () ->
+Timer = ->
   [count, setCount] = createSignal 0
   timer = setInterval (-> setCount count() + 1), 1000
   onCleanup -> clearInterval(timer)
   <h2>TIMER: {count}</h2>
 
-TodoList = () ->
+TodoList = ->
   # Subscription
   sub = Meteor.subscribe 'todo'
   onCleanup -> sub.stop()
