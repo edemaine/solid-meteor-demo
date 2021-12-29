@@ -5,8 +5,8 @@ import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {Tracker} from 'meteor/tracker';
 
-import {ToDo} from '/lib/todo';
-import type {TodoItem} from '/lib/todo';
+import {ToDo} from '/lib/todo.ts';
+import type {TodoItem} from '/lib/todo.ts';
 
 const Hello: Component<{name: string}> = (props) => {
   return <h2>Hello {props.name}!</h2>;

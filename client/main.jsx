@@ -4,7 +4,7 @@ import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {Tracker} from 'meteor/tracker';
 
-import {ToDo} from '/lib/todo';
+import {ToDo} from '/lib/todo.js';
 
 function Hello(props) {
   return <h2>Hello {props.name}!</h2>;
