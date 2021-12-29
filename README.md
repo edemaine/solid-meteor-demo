@@ -21,9 +21,12 @@ The main magic that turns on the SolidJS compiler is the `babel` setting in
 (But note that this doesn't yet handle Server-Side Rendering; see
 [issue #1](https://github.com/edemaine/meteor-solidjs-demo/issues/1).)
 
-Example code is provided in TypeScript, CoffeeScript, and JavaScript.
+Example code is provided in
+[TypeScript](https://www.typescriptlang.org/),
+[CoffeeScript](https://coffeescript.org/), and
+plain JavaScript.
 
-Most of the sample code is in the following client-side code,
+Most of the sample code is in the following client-side files,
 which includes a few different components to demonstrate basic signal usage
 and interaction with MongoDB.
 
@@ -32,14 +35,16 @@ and interaction with MongoDB.
 * JavaScript: [`client/main.jsx`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.jsx)
 
 To support the MongoDB examples, the following shared code
-(included in both client and server) defines support for a to-do list.
+(included in both client and server) defines a to-do list collection and
+methods for adding and removing to-do items.
 
 * TypeScript: [`lib/todo.ts`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.ts)
 * CoffeeScript: [`lib/todo.coffee`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.coffee)
 * JavaScript: [`lib/todo.js`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.js)
 
-To change from running the TypeScript code to running the CoffeeScript or
-JavaScript code, modify the relevant lines of
+Running `meteor` will execute the TypeScript code by default.
+To change to running the CoffeeScript or JavaScript code,
+modify the relevant lines of
 [`package.json`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/package.json)
 to the following replacement lines:
 
