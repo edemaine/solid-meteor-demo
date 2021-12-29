@@ -21,25 +21,31 @@ The main magic that turns on the SolidJS compiler is the `babel` setting in
 (But note that this doesn't yet handle Server-Side Rendering; see
 [issue #1](https://github.com/edemaine/meteor-solidjs-demo/issues/1).)
 
-Example code is provided in both JavaScript and TypeScript.
+Example code is provided in TypeScript, CoffeeScript, and JavaScript.
 
 Most of the sample code is in the following client-side code,
 which includes a few different components to demonstrate basic signal usage
 and interaction with MongoDB.
 
 * TypeScript: [`client/main.tsx`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.tsx)
+* CoffeeScript: [`client/main.coffee`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.coffee)
 * JavaScript: [`client/main.jsx`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.jsx)
 
 To support the MongoDB examples, the following shared code
 (included in both client and server) defines support for a to-do list.
 
 * TypeScript: [`lib/todo.ts`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.ts)
+* CoffeeScript: [`lib/todo.coffee`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.coffee)
 * JavaScript: [`lib/todo.js`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/lib/todo.js)
 
-To change from running the TypeScript code to running the JavaScript code,
-modify the relevant lines of
+To change from running the TypeScript code to running the CoffeeScript or
+JavaScript code, modify the relevant lines of
 [`package.json`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/package.json)
 to the following replacement lines:
+
+<table>
+<tr><th>CoffeeScript</th><th>TypeScript</th></tr>
+<tr><td>
 
 ```json
   "meteor": {
@@ -48,3 +54,15 @@ to the following replacement lines:
       "server": "server/main.js"
     },
 ```
+
+</td><td>
+
+```json
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.coffee",
+      "server": "server/main.coffee"
+    },
+```
+
+</td></tr></table>
