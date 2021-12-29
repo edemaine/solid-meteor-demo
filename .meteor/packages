@@ -18,3 +18,4 @@ session
 autoupdate
 mongo
 check
+coffeescript

@@ -1,13 +1,12 @@
 import { Meteor } from "meteor/meteor";
-//import { onPageLoad } from "meteor/server-render";
+#import { onPageLoad } from "meteor/server-render";
 
-import '/lib/todo';
+import '/lib/todo.coffee'
 
-Meteor.startup(() => {
-  // Code to run on server startup.
-});
+Meteor.startup ->
+  # Code to run on server startup.
 
-/*
+###
 onPageLoad(sink => {
   // Code to run on every request.
   sink.renderIntoElementById(
@@ -15,4 +14,4 @@ onPageLoad(sink => {
     `Server time: ${new Date}`
   );
 });
-*/
+###

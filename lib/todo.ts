@@ -1,6 +1,6 @@
-import {Meteor} from 'meteor/meteor'
-import {Mongo} from 'meteor/mongo'
-import {check} from 'meteor/check'
+import {Meteor} from 'meteor/meteor';
+import {Mongo} from 'meteor/mongo';
+import {check} from 'meteor/check';
 
 export interface TodoItem {
   _id: string,
@@ -9,6 +9,8 @@ export interface TodoItem {
 }
 
 export const ToDo = new Mongo.Collection<TodoItem>('todo');
+
+console.log('Using TypeScript library.');
 
 if (Meteor.isServer) {
   Meteor.publish('todo', () => ToDo.find());
