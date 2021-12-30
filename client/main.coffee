@@ -2,7 +2,7 @@ import {createEffect, createSignal, onCleanup} from 'solid-js'
 import {render} from 'solid-js/web'
 import {Meteor} from 'meteor/meteor'
 import {Session} from 'meteor/session'
-import {Tracker} from 'meteor/tracker'
+import {createFind, createSubscribe} from 'solidjs-meteor-data'
 
 import {ToDo} from '/lib/todo.coffee'
 
@@ -23,15 +23,14 @@ Timer = ->
   <h2>TIMER: {count}</h2>
 
 TodoList = ->
-  # Subscription
-  sub = Meteor.subscribe 'todo'
-  onCleanup -> sub.stop()
-  # Query
-  [todos, setTodos] = createSignal []
-  computation = Tracker.autorun ->
-    setTodos ToDo.find({}, sort: created: -1).fetch()
-  onCleanup -> computation.stop()
-  # Display
+  ## Subscription
+  createSubscribe 'todo'
+  ## Alternative without library:
+  #sub = Meteor.subscribe 'todo'
+  #onCleanup -> sub.stop()
+  ## Query
+  todos = createFind -> ToDo.find {}, sort: created: -1
+  ## Display
   itemInput = null
   onAdd = (e) ->
     e.preventDefault()
@@ -49,6 +48,7 @@ TodoList = ->
     </form>
     <table>
       <For each={todos()}>{(todo) ->
+        console.log "Rendering #{todo._id} '#{todo.title}'"
         <tr data-id={todo._id}>
           <td>{todo.title}</td>
           <td class="date">{todo.created.toLocaleString()}</td>

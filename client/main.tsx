@@ -3,7 +3,7 @@ import type {Component} from 'solid-js'
 import {render} from 'solid-js/web';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
-import {Tracker} from 'meteor/tracker';
+import {createFind, createSubscribe} from 'solidjs-meteor-data';
 
 import {ToDo} from '/lib/todo.ts';
 import type {TodoItem} from '/lib/todo.ts';
@@ -30,13 +30,13 @@ const Timer: Component = () => {
 
 const TodoList: Component = () => {
   // Subscription
-  const sub = Meteor.subscribe('todo');
-  onCleanup(() => sub.stop());
+  createSubscribe('todo');
+  // Alternative without library:
+  //sub = Meteor.subscribe('todo');
+  //onCleanup(() => sub.stop());
   // Query
-  const [todos, setTodos] = createSignal<TodoItem[]>([]);
-  const computation = Tracker.autorun(() =>
-    setTodos(ToDo.find({}, {sort: {created: -1}}).fetch()));
-  onCleanup(() => computation.stop());
+  const todos = createFind<TodoItem>(() =>
+    ToDo.find({}, {sort: {created: -1}}));
   // Display
   let itemInput: HTMLInputElement;
   function onAdd(e: Event) {
@@ -56,13 +56,14 @@ const TodoList: Component = () => {
       <input type="submit" onClick={onAdd} value="Add Item"/>
     </form>
     <table>
-      <For each={todos()}>{(todo) =>
-        <tr data-id={todo._id}>
+      <For each={todos()}>{(todo) => {
+        console.log(`Rendering ${todo._id} '${todo.title}'`);
+        return <tr data-id={todo._id}>
           <td>{todo.title}</td>
           <td class="date">{todo.created.toLocaleString()}</td>
           <td><button onClick={onDelete}>Delete</button></td>
-        </tr>
-      }</For>
+        </tr>;
+      }}</For>
     </table>
   </div>;
 }
