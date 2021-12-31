@@ -4,6 +4,9 @@ This app is a simple example of using the
 [SolidJS reactive framework](https://www.solidjs.com/)
 to build the user interface within the
 [Meteor full-stack JavaScript platform](https://www.meteor.com/).
+It uses the
+[solidjs-meteor-data library](https://github.com/edemaine/solidjs-meteor-data/)
+built for this very purpose, and serves as a demo of that library.
 
 ## How To Use
 
@@ -28,7 +31,8 @@ plain JavaScript.
 
 Most of the sample code is in the following client-side files,
 which includes a few different components to demonstrate basic signal usage
-and interaction with MongoDB.
+and interaction with MongoDB via the
+[solidjs-meteor-data library](https://github.com/edemaine/solidjs-meteor-data/).
 
 * TypeScript: [`client/main.tsx`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.tsx)
 * CoffeeScript: [`client/main.coffee`](https://github.com/edemaine/meteor-solidjs-demo/blob/main/client/main.coffee)
