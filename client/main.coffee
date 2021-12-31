@@ -1,8 +1,8 @@
-import {createEffect, createSignal, onCleanup} from 'solid-js'
+import {createSignal, onCleanup} from 'solid-js'
 import {render} from 'solid-js/web'
 import {Meteor} from 'meteor/meteor'
 import {Session} from 'meteor/session'
-import {createFind, createSubscribe} from 'solidjs-meteor-data'
+import {createFind, createSubscribe, createTracker} from 'solidjs-meteor-data'
 
 import {ToDo} from '/lib/todo.coffee'
 
@@ -66,8 +66,12 @@ TodoList = ->
 App = ->
   # Keep name signal synchronized with Meteor Session variable.
   # This preserves the name field across server-triggered reloads.
-  [name, setName] = createSignal Session.get('name') or 'Solid'
-  createEffect -> Session.set 'name', name()
+  ## Use Session variable to remember name across server-triggered reloads.
+  name = createTracker -> Session.get('name') or 'Solid'
+  setName = (n) -> Session.set 'name', n
+  ## Alternative without library:
+  #[name, setName] = createSignal Session.get('name') or 'Solid'
+  #createEffect -> Session.set 'name', name()
 
   <>
     <h1>Minimal Meteor + SolidJS demo</h1>
