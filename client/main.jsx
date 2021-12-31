@@ -26,13 +26,14 @@ function Timer() {
 }
 
 function TodoList() {
+  const [sort, setSort] = createSignal(-1);
   // Subscription
   createSubscribe('todo');
   // Alternative without library:
   //sub = Meteor.subscribe('todo');
   //onCleanup(() => sub.stop());
   // Query
-  const todos = createFind(() => ToDo.find({}, {sort: {created: -1}}));
+  const todos = createFind(() => ToDo.find({}, {sort: {created: sort()}}));
   // Display
   let itemInput;
   function onAdd(e) {
@@ -46,7 +47,11 @@ function TodoList() {
     Meteor.call('todo.del', row.dataset.id);
   }
   return <div>
-    <h2>To-Do List</h2>
+    <h2>To-Do List
+      <button onClick={() => setSort((s) => -s)}>
+        Sort {sort() > 0 ? '🠗' : '🠕'}
+      </button>
+    </h2>
     <form onSubmit={onAdd}>
       <input ref={itemInput}/>
       <input type="submit" onClick={onAdd} value="Add Item"/>

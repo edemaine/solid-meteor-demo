@@ -5,5 +5,9 @@ body {
 
 .date {
   font-size: small;
-  padding: 0px 16px;
+  padding-left: 16px;
+}
+
+button, input[type="submit"] {
+  margin-left: 16px;
 }

@@ -23,13 +23,14 @@ Timer = ->
   <h2>TIMER: {count}</h2>
 
 TodoList = ->
+  [sort, setSort] = createSignal -1
   ## Subscription
   createSubscribe 'todo'
   ## Alternative without library:
   #sub = Meteor.subscribe 'todo'
   #onCleanup -> sub.stop()
   ## Query
-  todos = createFind -> ToDo.find {}, sort: created: -1
+  todos = createFind -> ToDo.find {}, sort: created: sort()
   ## Display
   itemInput = null
   onAdd = (e) ->
@@ -41,7 +42,11 @@ TodoList = ->
     row = button.parentNode.parentNode
     Meteor.call 'todo.del', row.dataset.id
   <div>
-    <h2>To-Do List</h2>
+    <h2>To-Do List
+      <button onClick={-> setSort (s) -> -s}>
+        Sort {if sort() > 0 then '🠗' else '🠕'}
+      </button>
+    </h2>
     <form onSubmit={onAdd}>
       <input ref={itemInput}/>
       <input type="submit" onClick={onAdd} value="Add Item"/>
