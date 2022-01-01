@@ -1,4 +1,4 @@
-import {For, createSignal, onCleanup} from 'solid-js';
+import {For, Show, createSignal, onCleanup} from 'solid-js';
 import type {Component} from 'solid-js';
 import {render} from 'solid-js/web';
 import {Meteor} from 'meteor/meteor';
@@ -74,6 +74,39 @@ const TodoList: Component<{name: string}> = (props) => {
   </div>;
 }
 
+const ComplexTracker: Component = () => {
+  // Test createTracker responding to changing Meteor and SolidJS dependencies
+  let actualStage = 2;
+  Session.set('stage', actualStage);
+  const [stage, setStage] = createSignal<number>(actualStage);
+  const step = (set: (s: number) => void): NodeJS.Timeout =>
+    setTimeout(() => set(actualStage >= 7 ? actualStage = 2 : ++actualStage),
+      2000);
+  const trackStage = createTracker(() => {
+    Session.get('stage');
+    if (actualStage & 2) {
+      Session.get('stage');
+      if (!(actualStage & 4) || !(actualStage & 1))
+        step((s) => Session.set('stage', s));
+    }
+    if (actualStage & 4) {
+      stage();
+      if (!(actualStage & 2) || actualStage & 1)
+        step((s) => setStage(s));
+    }
+    return actualStage;
+  });
+  return <div>
+    <h2>Reactivity Test Stage {trackStage()}</h2>
+    <ul>
+      <Show when={trackStage() & 2}><li>Depending on Meteor data</li></Show>
+      <Show when={trackStage() & 4}><li>Depending on SolidJS data</li></Show>
+      <Show when={trackStage() === 6}><li>Changing Meteor data</li></Show>
+      <Show when={trackStage() === 7}><li>Changing SolidJS data</li></Show>
+    </ul>
+  </div>;
+};
+
 const App: Component = () => {
   // Use Session variable to remember name across server-triggered reloads.
   const name = createTracker(() => Session.get('name') || 'Solid');
@@ -88,6 +121,7 @@ const App: Component = () => {
     <Hello name={name()}/>
     <TodoList name={name()}/>
     <Timer/>
+    <ComplexTracker/>
   </>;
 }
 
