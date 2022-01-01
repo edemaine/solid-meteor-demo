@@ -28,21 +28,22 @@ const Timer: Component = () => {
   return <h2>TIMER: {count}</h2>;
 }
 
-const TodoList: Component = () => {
+const TodoList: Component<{name: string}> = (props) => {
   const [sort, setSort] = createSignal<number>(-1);
   // Subscription
-  createSubscribe('todo');
+  //createSubscribe('todo', props.name);
+  createTracker(() => Meteor.subscribe('todo', props.name));
   // Alternative without library:
   //sub = Meteor.subscribe('todo');
   //onCleanup(() => sub.stop());
   // Query
   const todos = createFind<TodoItem>(() =>
-    ToDo.find({}, {sort: {created: sort()}}));
+    ToDo.find({name: props.name}, {sort: {created: sort()}}));
   // Display
   let itemInput: HTMLInputElement;
   function onAdd(e: Event) {
     e.preventDefault();
-    Meteor.call('todo.add', itemInput.value);
+    Meteor.call('todo.add', props.name, itemInput.value);
     itemInput.value = '';
   }
   function onDelete(e: Event) {
@@ -51,7 +52,7 @@ const TodoList: Component = () => {
     Meteor.call('todo.del', row.dataset.id);
   }
   return <div>
-    <h2>To-Do List
+    <h2>To-Do List for {props.name}
       <button onClick={() => setSort((s) => -s)}>
         Sort {sort() > 0 ? '🠗' : '🠕'}
       </button>
@@ -85,8 +86,8 @@ const App: Component = () => {
     <h1>Minimal Meteor + SolidJS demo</h1>
     <NameInput name={name()} setName={setName}/>
     <Hello name={name()}/>
+    <TodoList name={name()}/>
     <Timer/>
-    <TodoList/>
   </>;
 }
 
