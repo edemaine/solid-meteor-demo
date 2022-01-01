@@ -31,11 +31,9 @@ const Timer: Component = () => {
 const TodoList: Component<{name: string}> = (props) => {
   const [sort, setSort] = createSignal<number>(-1);
   // Subscription
-  //createSubscribe('todo', props.name);
-  createTracker(() => Meteor.subscribe('todo', props.name));
-  // Alternative without library:
-  //sub = Meteor.subscribe('todo');
-  //onCleanup(() => sub.stop());
+  createSubscribe('todo', () => props.name);
+  //or: createSubscribe(() => Meteor.subscribe('todo', props.name));
+  //or: createTracker(() => Meteor.subscribe('todo', props.name));
   // Query
   const todos = createFind<TodoItem>(() =>
     ToDo.find({name: props.name}, {sort: {created: sort()}}));
