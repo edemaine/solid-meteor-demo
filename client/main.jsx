@@ -1,4 +1,4 @@
-import {createSignal, onCleanup} from 'solid-js';
+import {For, Show, createSignal, onCleanup} from 'solid-js';
 import {render} from 'solid-js/web';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
@@ -25,20 +25,20 @@ function Timer() {
   return <h2>TIMER: {count}</h2>;
 }
 
-function TodoList() {
+function TodoList(props) {
   const [sort, setSort] = createSignal(-1);
   // Subscription
-  createSubscribe('todo');
-  // Alternative without library:
-  //sub = Meteor.subscribe('todo');
-  //onCleanup(() => sub.stop());
+  createSubscribe('todo', () => props.name);
+  //or: createSubscribe(() => Meteor.subscribe('todo', props.name));
+  //or: createTracker(() => Meteor.subscribe('todo', props.name));
   // Query
-  const todos = createFind(() => ToDo.find({}, {sort: {created: sort()}}));
+  const todos = createFind(() =>
+    ToDo.find({name: props.name}, {sort: {created: sort()}}));
   // Display
   let itemInput;
   function onAdd(e) {
     e.preventDefault();
-    Meteor.call('todo.add', itemInput.value);
+    Meteor.call('todo.add', props.name, itemInput.value);
     itemInput.value = '';
   }
   function onDelete(e) {
@@ -69,6 +69,38 @@ function TodoList() {
   </div>;
 }
 
+function ComplexTracker() {
+  // Test createTracker responding to changing Meteor and SolidJS dependencies
+  let actualStage = 2;
+  Session.set('stage', actualStage);
+  const [stage, setStage] = createSignal(actualStage);
+  const step = (set) =>
+    setTimeout(() => set(actualStage >= 7 ? actualStage = 2 : ++actualStage),
+      2000);
+  const trackStage = createTracker(() => {
+    if (actualStage & 2) {
+      Session.get('stage');
+      if (!(actualStage & 4) || !(actualStage & 1))
+        step((s) => Session.set('stage', s));
+    }
+    if (actualStage & 4) {
+      stage();
+      if (!(actualStage & 2) || actualStage & 1)
+        step((s) => setStage(s));
+    }
+    return actualStage;
+  });
+  return <div>
+    <h2>Reactivity Test Stage {trackStage()}</h2>
+    <ul>
+      <Show when={trackStage() & 2}><li>Depending on Meteor data</li></Show>
+      <Show when={trackStage() & 4}><li>Depending on SolidJS data</li></Show>
+      <Show when={trackStage() === 6}><li>Changing Meteor data</li></Show>
+      <Show when={trackStage() === 7}><li>Changing SolidJS data</li></Show>
+    </ul>
+  </div>;
+};
+
 function App() {
   // Use Session variable to remember name across server-triggered reloads.
   const name = createTracker(() => Session.get('name') || 'Solid');
@@ -81,8 +113,9 @@ function App() {
     <h1>Minimal Meteor + SolidJS demo</h1>
     <NameInput name={name()} setName={setName}/>
     <Hello name={name()}/>
+    <TodoList name={name()}/>
     <Timer/>
-    <TodoList/>
+    <ComplexTracker/>
   </>;
 }
 

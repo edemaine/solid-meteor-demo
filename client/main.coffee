@@ -22,20 +22,20 @@ Timer = ->
   onCleanup -> clearInterval(timer)
   <h2>TIMER: {count}</h2>
 
-TodoList = ->
+TodoList = (props) ->
   [sort, setSort] = createSignal -1
   ## Subscription
-  createSubscribe 'todo'
-  ## Alternative without library:
-  #sub = Meteor.subscribe 'todo'
-  #onCleanup -> sub.stop()
+  createSubscribe 'todo', -> props.name
+  #or: createSubscribe -> Meteor.subscribe 'todo', props.name
+  #or: createTracker -> Meteor.subscribe 'todo', props.name
   ## Query
-  todos = createFind -> ToDo.find {}, sort: created: sort()
+  todos = createFind ->
+    ToDo.find {name: props.name}, sort: created: sort()
   ## Display
   itemInput = null
   onAdd = (e) ->
     e.preventDefault()
-    Meteor.call 'todo.add', itemInput.value
+    Meteor.call 'todo.add', props.name, itemInput.value
     itemInput.value = ''
   onDelete = (e) ->
     button = e.currentTarget
@@ -63,6 +63,34 @@ TodoList = ->
     </table>
   </div>
 
+ComplexTracker = ->
+  ## Test createTracker responding to changing Meteor and SolidJS dependencies
+  actualStage = 2
+  Session.set 'stage', actualStage
+  [stage, setStage] = createSignal actualStage
+  step = (set) -> setTimeout (->
+    set if actualStage >= 7 then actualStage = 2 else ++actualStage
+  ), 2000
+  trackStage = createTracker ->
+    if actualStage & 2
+      Session.get 'stage'
+      if not (actualStage & 4) or not (actualStage & 1)
+        step (s) -> Session.set 'stage', s
+    if actualStage & 4
+      stage()
+      if not (actualStage & 2) or (actualStage & 1)
+        step (s) => setStage s
+    actualStage
+  <div>
+    <h2>Reactivity Test Stage {trackStage()}</h2>
+    <ul>
+      <Show when={trackStage() & 2}><li>Depending on Meteor data</li></Show>
+      <Show when={trackStage() & 4}><li>Depending on SolidJS data</li></Show>
+      <Show when={trackStage() == 6}><li>Changing Meteor data</li></Show>
+      <Show when={trackStage() == 7}><li>Changing SolidJS data</li></Show>
+    </ul>
+  </div>
+
 App = ->
   # Keep name signal synchronized with Meteor Session variable.
   # This preserves the name field across server-triggered reloads.
@@ -77,8 +105,9 @@ App = ->
     <h1>Minimal Meteor + SolidJS demo</h1>
     <NameInput name={name()} setName={setName}/>
     <Hello name={name()}/>
+    <TodoList name={name()}/>
     <Timer/>
-    <TodoList/>
+    <ComplexTracker/>
   </>
 
 render (-> <App/>), document.body

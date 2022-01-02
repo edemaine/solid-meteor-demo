@@ -81,7 +81,6 @@ const ComplexTracker: Component = () => {
     setTimeout(() => set(actualStage >= 7 ? actualStage = 2 : ++actualStage),
       2000);
   const trackStage = createTracker(() => {
-    Session.get('stage');
     if (actualStage & 2) {
       Session.get('stage');
       if (!(actualStage & 4) || !(actualStage & 1))

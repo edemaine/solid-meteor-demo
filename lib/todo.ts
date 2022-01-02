@@ -21,6 +21,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
   'todo.add': (name, title) => {
+    check(name, String);
     check(title, String);
     ToDo.insert({name, title, created: new Date});
   },
