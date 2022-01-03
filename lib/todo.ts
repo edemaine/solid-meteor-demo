@@ -16,7 +16,10 @@ console.log('Using TypeScript library.');
 if (Meteor.isServer) {
   // Each user name has a to-do list.  Index and subscribe by name.
   ToDo.createIndex({name: 1});
-  Meteor.publish('todo', (name) => ToDo.find({name}));
+  Meteor.publish('todo', (name) => {
+    check(name, String);
+    return ToDo.find({name});
+  });
 }
 
 Meteor.methods({
