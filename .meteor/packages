@@ -13,7 +13,7 @@ ecmascript@0.16.0              # Enable ECMAScript2015+ syntax in app code
 typescript@4.4.0              # Enable TypeScript syntax in .ts and .tsx modules
 shell-server@0.5.0            # Server-side component of the `meteor shell` command
 webapp@1.13.0                  # Serves a Meteor app over HTTP
-server-render@0.4.0           # Support for server-side rendering
+#server-render@0.4.0           # Support for server-side rendering
 session
 autoupdate
 mongo
