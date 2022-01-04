@@ -3,8 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "build": "tsc",
-    "test": "tsc --noEmit",
+    "test": "tsc",
     "test-mocha-notyet": "meteor test --once --driver-package meteortesting:mocha",
     "test-app-notyet": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
     "visualize": "meteor --production --extra-packages bundle-visualizer"

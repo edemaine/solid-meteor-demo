@@ -17,6 +17,9 @@ built for this very purpose, and serves as a demo of that library.
 4. Run `meteor` to start a dev server.
 5. Open `http://localhost:3000`.
 
+To type check the TypeScript code, run `npm run test`
+(or `npm install -g typescript` once and then just run `tsc`).
+
 ## How It Works
 
 The main magic that turns on the SolidJS compiler is the `babel` setting in
