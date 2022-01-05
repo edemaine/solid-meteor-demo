@@ -110,4 +110,9 @@ App = ->
     <ComplexTracker/>
   </>
 
-render (-> <App/>), document.body
+dispose = render (-> <App/>), document.body
+
+# Enable HMR: If this file changes, rerender instead of reloading.
+if module.hot
+  module.hot.dispose dispose
+  module.hot.accept()

@@ -119,4 +119,10 @@ function App() {
   </>;
 }
 
-render(() => <App/>, document.body);
+const dispose = render(() => <App/>, document.body);
+
+// Enable HMR: If this file changes, rerender instead of reloading.
+if (module.hot) {
+  module.hot.dispose(dispose);
+  module.hot.accept();
+}

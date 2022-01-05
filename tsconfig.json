@@ -29,7 +29,7 @@
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["node", "meteor"],
     /*"types": ["node", "mocha"],*/
     "esModuleInterop": true,
     "preserveSymlinks": true,

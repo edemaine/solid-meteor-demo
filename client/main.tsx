@@ -122,4 +122,24 @@ const App: Component = () => {
   </>;
 }
 
-render(() => <App/>, document.body);
+const dispose = render(() => <App/>, document.body);
+
+interface MeteorModule extends NodeModule {
+  hot?: {
+    accept(): void;
+    reject(): void;
+    dispose(callback: (data: any) => void): void;
+    data: any;
+    onRequire(callbacks: {
+      before(requiredModule: MeteorModule, parentId: string): any;
+      after(requiredModule: MeteorModule, data: any): void;
+    }): void;
+  }
+};
+declare var module: MeteorModule;
+
+// Enable HMR: If this file changes, rerender instead of reloading.
+if (module.hot) {
+  module.hot.dispose(dispose);
+  module.hot.accept();
+}
