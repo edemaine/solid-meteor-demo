@@ -125,14 +125,14 @@ const App: Component = () => {
 const dispose = render(() => <App/>, document.body);
 
 interface MeteorModule extends NodeModule {
-  hot?: {
+  readonly hot?: {
     accept(): void;
-    reject(): void;
-    dispose(callback: (data: any) => void): void;
-    data: any;
-    onRequire(callbacks: {
-      before(requiredModule: MeteorModule, parentId: string): any;
-      after(requiredModule: MeteorModule, data: any): void;
+    decline(): void;
+    dispose(callback: (data: unknown) => void): void;
+    data: unknown | null;
+    onRequire<T>(callbacks: {
+      before?(requiredModule: NodeModule, parentId: string): T;
+      after?(requiredModule: NodeModule, data: T): void;
     }): void;
   }
 };
