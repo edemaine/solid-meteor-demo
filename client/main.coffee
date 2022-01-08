@@ -6,6 +6,12 @@ import {createFind, createSubscribe, createTracker} from 'solid-meteor-data'
 
 import {ToDo} from '/lib/todo.coffee'
 
+## AUTO MODE: Adding the following lines obviates the need for wrapping use of
+## Meteor reactive variables in createTracker; instead, createMemo (or just a
+## function) suffices.
+#import {autoTracker} from 'solidjs-meteor-data/autoTracker'
+#autoTracker()
+
 Hello = (props) ->
   <h2>Hello {props.name}!</h2>
 
@@ -92,10 +98,9 @@ ComplexTracker = ->
   </div>
 
 App = ->
-  # Keep name signal synchronized with Meteor Session variable.
-  # This preserves the name field across server-triggered reloads.
   ## Use Session variable to remember name across server-triggered reloads.
   name = createTracker -> Session.get('name') or 'Solid'
+  #or in auto mode: name = -> Session.get('name') || 'Solid'
   setName = (n) -> Session.set 'name', n
   ## Alternative without library:
   #[name, setName] = createSignal Session.get('name') or 'Solid'
