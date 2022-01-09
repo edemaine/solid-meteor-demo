@@ -23,7 +23,7 @@
   },
   "meteor": {
     "mainModule": {
-      "client": "client/main.coffee",
+      "client": "client/main.tsx",
       "server": "server/main.ts"
     },
     "testModule": "tests/main.js"
