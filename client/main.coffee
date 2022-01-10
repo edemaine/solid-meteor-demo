@@ -2,7 +2,7 @@ import {createSignal, onCleanup} from 'solid-js'
 import {render} from 'solid-js/web'
 import {Meteor} from 'meteor/meteor'
 import {Session} from 'meteor/session'
-import {createFind, createSubscribe, createTracker} from 'solidjs-meteor-data'
+import {createFind, createSubscribe, createTracker} from 'solid-meteor-data'
 
 import {ToDo} from '/lib/todo.coffee'
 
