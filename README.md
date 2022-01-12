@@ -83,3 +83,28 @@ The code demonstrates support for
 [Hot Module Replacement](https://docs.meteor.com/packages/hot-module-replacement.html):
 if you change `client/main.{tsx,coffee,jsx}`, then that module will reload and
 the interface will rerender, without having to refresh the browser.
+
+## Components
+
+The demo has six main components:
+
+* `App` is the top-level component.  It builds a signal-like `[name, setName]`
+  that is actually stored via Meteor's `Session` state, so it persists across
+  hot code updates.
+* `NameInput` asks for the user's name, and stores it in the specified
+  signal-like `[name, setName]`.
+* `Hello` just says &ldquo;Hello &lt;name&gt;&rdquo;
+  (illustrating basic reactivity)
+* `TodoList` renders a to-do list that is local to the user (changing the name
+  switches to a different to-do list), allowing addition and deletion of items.
+  It logs a message when each to-do item gets rendered to the DOM, so you can
+  see what rerenders when.
+  Notably, if you add an item, only the added item renders.
+  The sort order can be switched between increasing and decreasing order;
+  notably, this does not cause any to-do items to render
+  (just their DOM order changes).
+* `Timer` shows the number of seconds since the component loaded
+  (illustrating the use of `setInterval` effects).
+* `ComplexTracker` is a test to make sure that `createTracker` can correctly
+  change its dependencies between SolidJS and Meteor Tracker state.
+  It should cycle from stage 2 to stage 7 over the course of 12 seconds.
