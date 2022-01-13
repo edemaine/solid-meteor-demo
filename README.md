@@ -4,9 +4,12 @@ This app is a simple example of using the
 [SolidJS reactive framework](https://www.solidjs.com/)
 to build the user interface within the
 [Meteor full-stack JavaScript platform](https://www.meteor.com/).
-It uses the
-[solid-meteor-data library](https://github.com/edemaine/solid-meteor-data/)
-built for this very purpose, and serves as a demo of that library.
+It demonstrates the use of two libraries:
+
+* [`edemaine:solid` on Atmosphere](https://github.com/edemaine/meteor-solid)
+  enables the SolidJS compiler for JSX notation
+* [`solid-meteor-data` on NPM](https://github.com/edemaine/solid-meteor-data/)
+  provides helper functions for Meteor reactivity within SolidJS.
 
 ## How To Use
 
@@ -20,26 +23,28 @@ built for this very purpose, and serves as a demo of that library.
 To type check the TypeScript code, run `npm run test`
 (or `npm install -g typescript` once and then just run `tsc`).
 
-## How It Works
-
-The main magic that turns on the SolidJS compiler is the `babel` setting in
-[`package.json`](https://github.com/edemaine/solid-meteor-demo/blob/main/package.json).
-(But note that this doesn't yet handle Server-Side Rendering; see
-[issue #1](https://github.com/edemaine/solid-meteor-demo/issues/1).)
+## Overview
 
 Example code is provided in
 [TypeScript](https://www.typescriptlang.org/),
 [CoffeeScript](https://coffeescript.org/), and
 plain JavaScript.
 
-Most of the sample code is in the following client-side files,
+Most of the sample code is in the following files,
 which includes a few different components to demonstrate basic signal usage
 and interaction with MongoDB via the
 [solid-meteor-data library](https://github.com/edemaine/solid-meteor-data/).
 
-* TypeScript: [`client/main.tsx`](https://github.com/edemaine/solid-meteor-demo/blob/main/client/main.tsx)
-* CoffeeScript: [`client/main.coffee`](https://github.com/edemaine/solid-meteor-demo/blob/main/client/main.coffee)
-* JavaScript: [`client/main.jsx`](https://github.com/edemaine/solid-meteor-demo/blob/main/client/main.jsx)
+* TypeScript: [`ui/main.tsx`](https://github.com/edemaine/solid-meteor-demo/blob/main/ui/main.tsx)
+* CoffeeScript: [`ui/main.coffee`](https://github.com/edemaine/solid-meteor-demo/blob/main/ui/main.coffee)
+* JavaScript: [`ui/main.jsx`](https://github.com/edemaine/solid-meteor-demo/blob/main/ui/main.jsx)
+
+You can think of these as client-side, but to support SSR, they're actually
+shared by the client and server, via corresponding files in the
+[`client`](https://github.com/edemaine/solid-meteor-demo/blob/main/client)
+and
+[`server`](https://github.com/edemaine/solid-meteor-demo/blob/main/server)
+directories.
 
 To support the MongoDB examples, the following shared code
 (included in both client and server) defines a to-do list collection and
@@ -79,11 +84,16 @@ to the following replacement lines:
 
 </td></tr></table>
 
+The code uses Server-Side Rendering (SSR) by default, meaning that the initial
+HTML bundle includes a server-rendered version of the page.  You can turn this
+off by setting `ssr: false` in the corresponding `solid` option.
+
 The code demonstrates support for
 [Hot Module Replacement](https://docs.meteor.com/packages/hot-module-replacement.html):
 if you change `client/main.{tsx,coffee,jsx}`, then that module will reload and
 the interface will rerender, without having to refresh the browser.
-Unfortunately, modifying `ui/main.{tsx,coffee,jsx}` still triggers a refresh.
+Unfortunately, modifying `ui/main.{tsx,coffee,jsx}` still triggers a refresh
+[[Issue #2](https://github.com/edemaine/solid-meteor-demo/issues/2).]
 
 ## Components
 
