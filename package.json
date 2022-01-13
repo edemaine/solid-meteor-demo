@@ -24,14 +24,13 @@
   "meteor": {
     "mainModule": {
       "client": "client/main.tsx",
-      "server": "server/main.ts"
+      "server": "server/main.tsx"
     },
     "testModule": "tests/main.js"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "solid"
-    ]
+  "solid": {
+    "ssr": true,
+    "verbose": true,
+    "ignore": ["**/*.[tj]s"]
   }
 }
