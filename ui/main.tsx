@@ -33,9 +33,9 @@ export const TodoList: Component<{name: string}> = (props) => {
   createSubscribe('todo', () => props.name);
   //or: createSubscribe(() => Meteor.subscribe('todo', props.name));
   //or: createTracker(() => Meteor.subscribe('todo', props.name));
-  // Query
-  const todos = createFind<TodoItem>(() =>
-    ToDo.find({name: props.name}, {sort: {created: sort()}}));
+  // Query. Skip on server because we don't know the right name.
+  const todos = Meteor.isServer ? () => [] : createFind<TodoItem>(() =>
+      ToDo.find({name: props.name}, {sort: {created: sort()}}));
   // Display
   let itemInput: HTMLInputElement;
   function onAdd(e: Event) {
@@ -121,3 +121,5 @@ export const App: Component = () => {
     <ComplexTracker/>
   </>;
 }
+
+if (module.hot) module.hot.decline();

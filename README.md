@@ -83,6 +83,7 @@ The code demonstrates support for
 [Hot Module Replacement](https://docs.meteor.com/packages/hot-module-replacement.html):
 if you change `client/main.{tsx,coffee,jsx}`, then that module will reload and
 the interface will rerender, without having to refresh the browser.
+Unfortunately, modifying `ui/main.{tsx,coffee,jsx}` still triggers a refresh.
 
 ## Components
 

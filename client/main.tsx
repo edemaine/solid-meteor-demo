@@ -3,18 +3,21 @@ import {onPageLoad} from 'meteor/server-render';
 
 import {App} from '/ui/main.tsx';
 
-onPageLoad(() => {
+let dispose: () => void;
+const renderApp = () => {
   // Render or hydrate depending on whether SSR is enabled.
-  let dispose;
   if (document.querySelector('body > :not(script)')) {
+    console.log('Hydrating from SSR');
     dispose = hydrate(() => <App/>, document.body);
   } else {
+    console.log('Rendering from scratch');
     dispose = render(() => <App/>, document.body);
   }
+};
+onPageLoad(renderApp);
 
-  // Enable HMR: If this file changes, rerender instead of reloading.
-  if (module.hot) {
-    module.hot.dispose(dispose);
-    module.hot.accept();
-  }
-});
+// Enable HMR: If this file changes, rerender instead of reloading.
+if (module.hot) {
+  module.hot.dispose(() => dispose && dispose());
+  module.hot.accept();
+}
