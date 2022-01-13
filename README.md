@@ -2,12 +2,12 @@
 
 This app is a simple example of using the
 [SolidJS reactive framework](https://www.solidjs.com/)
-to build the user interface within the
+to build your user interface within the
 [Meteor full-stack JavaScript platform](https://www.meteor.com/).
 It demonstrates the use of two libraries:
 
 * [`edemaine:solid` on Atmosphere](https://github.com/edemaine/meteor-solid)
-  enables the SolidJS compiler for JSX notation
+  enables the SolidJS compiler for JSX notation, including SSR.
 * [`solid-meteor-data` on NPM](https://github.com/edemaine/solid-meteor-data/)
   provides helper functions for Meteor reactivity within SolidJS.
 
@@ -84,7 +84,8 @@ to the following replacement lines:
 
 </td></tr></table>
 
-The code uses Server-Side Rendering (SSR) by default, meaning that the initial
+The [`server`](https://github.com/edemaine/solid-meteor-demo/blob/main/server)
+code implements Server-Side Rendering (SSR) by default, meaning that the initial
 HTML bundle includes a server-rendered version of the page.  You can turn this
 off by setting `ssr: false` in the corresponding `solid` option.
 
