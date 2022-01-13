@@ -1,35 +1,34 @@
 import {createSignal, onCleanup} from 'solid-js'
-import {render} from 'solid-js/web'
 import {Meteor} from 'meteor/meteor'
 import {Session} from 'meteor/session'
 import {createFind, createSubscribe, createTracker} from 'solid-meteor-data'
 
 import {ToDo} from '/lib/todo.coffee'
 
-Hello = (props) ->
+export Hello = (props) ->
   <h2>Hello {props.name}!</h2>
 
-NameInput = (props) ->
+export NameInput = (props) ->
   <div>
     Enter your name:
     <input value={props.name}
      onInput={(e) -> props.setName(e.target.value)}/>
   </div>
 
-Timer = ->
+export Timer = ->
   [count, setCount] = createSignal 0
   timer = setInterval (-> setCount count() + 1), 1000
   onCleanup -> clearInterval(timer)
   <h2>TIMER: {count}</h2>
 
-TodoList = (props) ->
+export TodoList = (props) ->
   [sort, setSort] = createSignal -1
   ## Subscription
   createSubscribe 'todo', -> props.name
   #or: createSubscribe -> Meteor.subscribe 'todo', props.name
   #or: createTracker -> Meteor.subscribe 'todo', props.name
-  ## Query
-  todos = createFind ->
+  ## Query. Skip on server because we don't know the right name.
+  todos = if Meteor.isServer then -> [] else createFind ->
     ToDo.find {name: props.name}, sort: created: sort()
   ## Display
   itemInput = null
@@ -42,7 +41,7 @@ TodoList = (props) ->
     row = button.parentNode.parentNode
     Meteor.call 'todo.del', row.dataset.id
   <div>
-    <h2>To-Do List
+    <h2>To-Do List for {props.name}
       <button onClick={-> setSort (s) -> -s}>
         Sort {if sort() > 0 then '🠗' else '🠕'}
       </button>
@@ -53,7 +52,7 @@ TodoList = (props) ->
     </form>
     <table>
       <For each={todos()}>{(todo) ->
-        console.log "Rendering #{todo._id} '#{todo.title}'"
+        console.log "Rendering #{todo._id} '#{todo.title}'" if Meteor.isClient
         <tr data-id={todo._id}>
           <td>{todo.title}</td>
           <td class="date">{todo.created.toLocaleString()}</td>
@@ -63,19 +62,19 @@ TodoList = (props) ->
     </table>
   </div>
 
-ComplexTracker = ->
+export ComplexTracker = ->
   ## Test createTracker responding to changing Meteor and SolidJS dependencies
   actualStage = 2
-  Session.set 'stage', actualStage
+  Session?.set 'stage', actualStage
   [stage, setStage] = createSignal actualStage
   step = (set) -> setTimeout (->
     set if actualStage >= 7 then actualStage = 2 else ++actualStage
   ), 2000
   trackStage = createTracker ->
     if actualStage & 2
-      Session.get 'stage'
+      Session?.get 'stage'
       if not (actualStage & 4) or not (actualStage & 1)
-        step (s) -> Session.set 'stage', s
+        step (s) -> Session?.set 'stage', s
     if actualStage & 4
       stage()
       if not (actualStage & 2) or (actualStage & 1)
@@ -91,15 +90,15 @@ ComplexTracker = ->
     </ul>
   </div>
 
-App = ->
+export App = ->
   # Keep name signal synchronized with Meteor Session variable.
   # This preserves the name field across server-triggered reloads.
   ## Use Session variable to remember name across server-triggered reloads.
-  name = createTracker -> Session.get('name') or 'Solid'
-  setName = (n) -> Session.set 'name', n
+  name = createTracker -> Session?.get('name') or 'Solid'
+  setName = (n) -> Session?.set 'name', n
   ## Alternative without library:
-  #[name, setName] = createSignal Session.get('name') or 'Solid'
-  #createEffect -> Session.set 'name', name()
+  #[name, setName] = createSignal Session?.get('name') or 'Solid'
+  #createEffect -> Session?.set 'name', name()
 
   <>
     <h1>Minimal Meteor + SolidJS demo</h1>
@@ -110,9 +109,4 @@ App = ->
     <ComplexTracker/>
   </>
 
-dispose = render (-> <App/>), document.body
-
-# Enable HMR: If this file changes, rerender instead of reloading.
-if module.hot
-  module.hot.dispose dispose
-  module.hot.accept()
+module.hot?.decline()

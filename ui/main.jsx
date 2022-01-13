@@ -1,39 +1,38 @@
 import {For, Show, createSignal, onCleanup} from 'solid-js';
-import {render} from 'solid-js/web';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {createFind, createSubscribe, createTracker} from 'solid-meteor-data';
 
 import {ToDo} from '/lib/todo.js';
 
-function Hello(props) {
+export function Hello(props) {
   return <h2>Hello {props.name}!</h2>;
 }
 
-function NameInput(props) {
+export function NameInput(props) {
   return <div>
     Enter your name:
     <input value={props.name}
-     onInput={(e) => props.setName(e.target.value)}/>
+     onInput={(e) => props.setName(e.currentTarget.value)}/>
   </div>;
 }
 
-function Timer() {
+export function Timer() {
   const [count, setCount] = createSignal(0);
   const timer = setInterval(() => setCount(count() + 1), 1000);
   onCleanup(() => clearInterval(timer));
   return <h2>TIMER: {count}</h2>;
 }
 
-function TodoList(props) {
+export function TodoList(props) {
   const [sort, setSort] = createSignal(-1);
   // Subscription
   createSubscribe('todo', () => props.name);
   //or: createSubscribe(() => Meteor.subscribe('todo', props.name));
   //or: createTracker(() => Meteor.subscribe('todo', props.name));
-  // Query
-  const todos = createFind(() =>
-    ToDo.find({name: props.name}, {sort: {created: sort()}}));
+  // Query. Skip on server because we don't know the right name.
+  const todos = Meteor.isServer ? () => [] : createFind(() =>
+      ToDo.find({name: props.name}, {sort: {created: sort()}}));
   // Display
   let itemInput;
   function onAdd(e) {
@@ -47,7 +46,7 @@ function TodoList(props) {
     Meteor.call('todo.del', row.dataset.id);
   }
   return <div>
-    <h2>To-Do List
+    <h2>To-Do List for {props.name}
       <button onClick={() => setSort((s) => -s)}>
         Sort {sort() > 0 ? '🠗' : '🠕'}
       </button>
@@ -58,7 +57,8 @@ function TodoList(props) {
     </form>
     <table>
       <For each={todos()}>{(todo) => {
-        console.log(`Rendering ${todo._id} '${todo.title}'`);
+        if (Meteor.isClient)
+          console.log(`Rendering ${todo._id} '${todo.title}'`);
         return <tr data-id={todo._id}>
           <td>{todo.title}</td>
           <td class="date">{todo.created.toLocaleString()}</td>
@@ -69,19 +69,19 @@ function TodoList(props) {
   </div>;
 }
 
-function ComplexTracker() {
+export function ComplexTracker() {
   // Test createTracker responding to changing Meteor and SolidJS dependencies
   let actualStage = 2;
-  Session.set('stage', actualStage);
+  Session?.set('stage', actualStage);
   const [stage, setStage] = createSignal(actualStage);
   const step = (set) =>
     setTimeout(() => set(actualStage >= 7 ? actualStage = 2 : ++actualStage),
       2000);
   const trackStage = createTracker(() => {
     if (actualStage & 2) {
-      Session.get('stage');
+      Session?.get('stage');
       if (!(actualStage & 4) || !(actualStage & 1))
-        step((s) => Session.set('stage', s));
+        step((s) => Session?.set('stage', s));
     }
     if (actualStage & 4) {
       stage();
@@ -101,13 +101,13 @@ function ComplexTracker() {
   </div>;
 };
 
-function App() {
+export function App() {
   // Use Session variable to remember name across server-triggered reloads.
-  const name = createTracker(() => Session.get('name') || 'Solid');
-  const setName = (n) => Session.set('name', n);
+  const name = createTracker(() => Session?.get('name') || 'Solid');
+  const setName = (n) => Session?.set('name', n);
   // Alternative without library:
-  //const [name, setName] = createSignal(Session.get('name') || 'Solid');
-  //createEffect(() => Session.set('name', name()));
+  //const [name, setName] = createSignal(Session?.get('name') || 'Solid');
+  //createEffect(() => Session?.set('name', name()));
 
   return <>
     <h1>Minimal Meteor + SolidJS demo</h1>
@@ -119,10 +119,4 @@ function App() {
   </>;
 }
 
-const dispose = render(() => <App/>, document.body);
-
-// Enable HMR: If this file changes, rerender instead of reloading.
-if (module.hot) {
-  module.hot.dispose(dispose);
-  module.hot.accept();
-}
+if (module.hot) module.hot.decline();

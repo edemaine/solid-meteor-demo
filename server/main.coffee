@@ -1,17 +1,12 @@
-import { Meteor } from "meteor/meteor";
-#import { onPageLoad } from "meteor/server-render";
+import {onPageLoad} from 'meteor/server-render'
+import {generateHydrationScript, renderToString} from 'solid-js/web'
+
+import {solid} from '/package.json'
+import {App} from '/ui/main.coffee'
 
 import '/lib/todo.coffee'
 
-Meteor.startup ->
-  # Code to run on server startup.
-
-###
-onPageLoad(sink => {
-  // Code to run on every request.
-  sink.renderIntoElementById(
-    "server-render-target",
-    `Server time: ${new Date}`
-  );
-});
-###
+if solid.ssr
+  onPageLoad (sink) ->
+    sink.appendToHead generateHydrationScript()
+    sink.appendToBody renderToString -> <App/>
