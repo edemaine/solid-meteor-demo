@@ -1,6 +1,7 @@
 import {render, hydrate} from 'solid-js/web';
 import {onPageLoad} from 'meteor/server-render';
 
+// @ts-ignore Explicit extension to distinguish from other languages
 import {App} from '/ui/main.tsx';
 
 // AUTO MODE: Adding the following lines obviates the need for wrapping use of
