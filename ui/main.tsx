@@ -1,3 +1,5 @@
+/* @refresh granular */
+
 import {For, Show, createSignal, onCleanup} from 'solid-js';
 import type {Component} from 'solid-js';
 import {Meteor} from 'meteor/meteor';
@@ -122,4 +124,4 @@ export const App: Component = () => {
   </>;
 }
 
-if (module.hot) module.hot.decline();
+if (module.hot) module.hot.accept();
