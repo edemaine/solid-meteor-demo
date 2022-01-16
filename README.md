@@ -11,6 +11,11 @@ It demonstrates the use of two libraries:
 * [`solid-meteor-data` on NPM](https://github.com/edemaine/solid-meteor-data/)
   provides helper functions for Meteor reactivity within SolidJS.
 
+Although not demonstrated here, if you have existing
+[Blaze](http://blazejs.org) templates to port, you may also be interested in
+[`edemaine:solid-meteor-helper`](https://github.com/edemaine/meteor-solid-template-helper/tree/main)
+which enables use of SolidJS components within Blaze.
+
 ## How To Use
 
 1. [Install Meteor](https://docs.meteor.com/install.html):
