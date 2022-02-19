@@ -16,7 +16,7 @@ server-render@0.4.0           # Support for server-side rendering
 #typescript@4.4.1              # Enable TypeScript syntax in .ts and .tsx modules
 #coffeescript@2.4.1
 coffeescript-compiler@2.4.1
-edemaine:solid@0.1.0          # Replaces ecmascript, typescript, coffeescript
+edemaine:solid@0.1.1          # Replaces ecmascript, typescript, coffeescript
 session@1.2.0
 autoupdate@1.8.0
 mongo@1.13.0
