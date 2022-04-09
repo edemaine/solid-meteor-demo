@@ -16,6 +16,15 @@ Although not demonstrated here, if you have existing
 [`edemaine:solid-meteor-helper`](https://github.com/edemaine/meteor-solid-template-helper/tree/main)
 which enables use of SolidJS components within Blaze.
 
+## [Demo Deployment](https://solid-meteor-demo.meteorapp.com/)
+
+You can try out a
+[live demo of the app](https://solid-meteor-demo.meteorapp.com/):
+
+* Add or remove a to-do item.
+* Change your name to instantly access a different to-do list.
+* Open the page on multiple browsers to see the instant reactivity.
+
 ## How To Use
 
 1. [Install Meteor](https://docs.meteor.com/install.html):
