@@ -17,7 +17,7 @@ Meteor.methods
   'todo.add': (name, title) ->
     check name, String
     check title, String
-    ToDo.insert {name, title, created: new Date}
+    await ToDo.insertAsync {name, title, created: new Date}
   'todo.del': (id) ->
     check id, String
-    ToDo.remove _id: id
+    await ToDo.removeAsync _id: id

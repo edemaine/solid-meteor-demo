@@ -34,12 +34,12 @@ export TodoList = (props) ->
   itemInput = null
   onAdd = (e) ->
     e.preventDefault()
-    Meteor.call 'todo.add', props.name, itemInput.value
+    Meteor.callAsync 'todo.add', props.name, itemInput.value
     itemInput.value = ''
   onDelete = (e) ->
     button = e.currentTarget
     row = button.parentNode.parentNode
-    Meteor.call 'todo.del', row.dataset.id
+    Meteor.callAsync 'todo.del', row.dataset.id
   <div>
     <h2>To-Do List for {props.name}
       <button onClick={-> setSort (s) -> -s}>

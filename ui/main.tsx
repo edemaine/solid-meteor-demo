@@ -40,13 +40,13 @@ export const TodoList: Component<{name: string}> = (props) => {
   let itemInput: HTMLInputElement;
   function onAdd(e: Event) {
     e.preventDefault();
-    Meteor.call('todo.add', props.name, itemInput.value);
+    Meteor.callAsync('todo.add', props.name, itemInput.value);
     itemInput.value = '';
   }
   function onDelete(e: Event) {
     const button = e.currentTarget as HTMLButtonElement;
     const row = button.parentNode!.parentNode as HTMLTableRowElement;
-    Meteor.call('todo.del', row.dataset.id);
+    Meteor.callAsync('todo.del', row.dataset.id);
   }
   return <div>
     <h2>To-Do List for {props.name}

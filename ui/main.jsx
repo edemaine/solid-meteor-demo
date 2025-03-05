@@ -37,13 +37,13 @@ export function TodoList(props) {
   let itemInput;
   function onAdd(e) {
     e.preventDefault();
-    Meteor.call('todo.add', props.name, itemInput.value);
+    Meteor.callAsync('todo.add', props.name, itemInput.value);
     itemInput.value = '';
   }
   function onDelete(e) {
     const button = e.currentTarget;
     const row = button.parentNode.parentNode;
-    Meteor.call('todo.del', row.dataset.id);
+    Meteor.callAsync('todo.del', row.dataset.id);
   }
   return <div>
     <h2>To-Do List for {props.name}

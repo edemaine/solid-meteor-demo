@@ -16,20 +16,20 @@ console.log('Using TypeScript library.');
 if (Meteor.isServer) {
   // Each user name has a to-do list.  Index and subscribe by name.
   ToDo.createIndex({name: 1});
-  Meteor.publish('todo', (name) => {
+  Meteor.publish('todo', (name: string) => {
     check(name, String);
     return ToDo.find({name});
   });
 }
 
 Meteor.methods({
-  'todo.add': (name, title) => {
+  'todo.add': async (name: string, title: string) => {
     check(name, String);
     check(title, String);
-    ToDo.insert({name, title, created: new Date});
+    await ToDo.insertAsync({name, title, created: new Date});
   },
-  'todo.del': (id) => {
+  'todo.del': async (id) => {
     check(id, String);
-    ToDo.remove({_id: id});
+    await ToDo.removeAsync({_id: id});
   }
 });
