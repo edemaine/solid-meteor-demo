@@ -108,7 +108,7 @@ The code demonstrates support for
 if you change `client/main.{tsx,coffee,jsx}`, then that module will reload and
 the interface will rerender, without having to refresh the browser.
 Unfortunately, modifying `ui/main.{tsx,coffee,jsx}` still triggers a refresh
-[[Issue #2](https://github.com/edemaine/solid-meteor-demo/issues/2).]
+[[Issue #5](https://github.com/edemaine/solid-meteor-demo/issues/5).]
 
 ## Components
 
